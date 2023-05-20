@@ -48,9 +48,19 @@ class Hand:
         return ''.join('\n ' + str(card) for card in self.cards)
 
 class Bot:
-    def __init__(self, name):
+    def __init__(self, name, balance=100):
         self.name = name
         self.hand = Hand()
+        self.balance = balance
+        self.bet = 0
+
+    def make_bet(self):
+        if self.balance >= 10:
+            self.bet = random.randint(10, min(50, self.balance))  # Bets a random amount between 10 and 50 (or remaining balance if it's less than 50)
+        else:
+            self.bet = self.balance  # If balance is less than 10, bet the remaining balance
+        self.balance -= self.bet
+        print(f"{self.name} bets {self.bet}. Remaining balance: {self.balance}")
 
     def make_decision(self):
         return 'h' if self.hand.value < 17 else 's'
@@ -85,6 +95,9 @@ class Game:
             bots = [Bot(f"Bot {i+1}") for i in range(4)]
             dealer = Bot("Dealer")
 
+            for bot in bots:
+                bot.make_bet()
+
             for _ in range(2):
                 for bot in bots:
                     bot.add_card(self.deck.deal())
@@ -104,6 +117,7 @@ class Game:
                         break
                 else:
                     print("Stand!")
+
             print("\nDealer's turn:")
             while dealer.hand.value < 17:
                 dealer.add_card(self.deck.deal())
@@ -118,23 +132,27 @@ class Game:
 
             if dealer_score > 21:
                 print("Dealer busts! All bots win!")
+                for bot in bots:
+                    if bot.hand.value <= 21:
+                        bot.balance += bot.bet * 2
             else:
-                winners = []
                 for bot in bots:
                     bot_score = bot.hand.value
                     if bot_score > 21:
                         print(f"{bot.name} busts!")
                     elif bot_score > dealer_score:
-                        winners.append(bot.name)
-
-                if not winners:
-                    print("Dealer wins! All bots lose.")
-                else:
-                    print("Bots that beat the dealer:")
-                    for winner in winners:
-                        print(winner)
+                        print(f"{bot.name} wins!")
+                        bot.balance += bot.bet * 2
+                    elif bot_score == dealer_score:
+                        print(f"{bot.name} ties with the dealer!")
+                        bot.balance += bot.bet  # Return the bet to the bot
+                    else:
+                        print(f"{bot.name} loses!")
 
             print("\n--- End of round ---")
+
+            for bot in bots:
+                print(f"{bot.name}'s remaining balance: {bot.balance}")
 
             self.deck = Deck()  # Refresh the deck for the next round
 
