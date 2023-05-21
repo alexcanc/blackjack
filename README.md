@@ -1,28 +1,25 @@
-Blackjack Game with Bots
-Overview
-This project is a simulation of a Blackjack game, written in Python, where bots play the game against the dealer. The goal of the game is to get as close to 21 as possible without going over.
+# Blackjack Game
 
-The game is played with a shuffled deck of 52 cards. Bots make bets, receive cards, and make decisions based on the state of their hands. The dealer also plays, following a set of predefined rules.
+This is a simple simulation of the blackjack card game, written in Python. The game involves one dealer and four bot players.
 
-Game Rules
-Each bot starts with a balance of 100.
-At the start of each round, each bot places a random bet between 10 and 50.
-Each bot and the dealer are dealt two cards.
-Bots can choose to hit (receive another card), stand (receive no more cards), double down (double their bet and receive exactly one more card), or split (if their first two cards have the same rank, they can split them into two hands and place an additional bet equal to the original on the second hand).
-Bots continue to make decisions until they stand or their hand value exceeds 21 (a bust).
-The dealer then plays, hitting until their hand value is 17 or more.
-If a bot's hand value is closer to 21 than the dealer's, without exceeding 21, the bot wins the round and receives twice their bet. If a bot busts or has a hand value further from 21 than the dealer's, they lose their bet. In the event of a tie, the bot's bet is returned.
-Bot Decision-Making
-Bots make decisions based on the following rules:
+## How the Game Works
 
-If a bot has two cards of the same rank and enough balance for an additional bet, it will split if the cards have a value of 8 or more, or a value of 4 (two twos or two threes).
-If a bot's hand value is between 9 and 11 (inclusive) and it has enough balance to double the bet, it will choose to double down.
-If a bot's hand value is less than 17, it will choose to hit.
-If a bot's hand value is 17 or more, it will choose to stand.
-Bots automatically count an Ace as 11, but will count it as 1 instead if counting it as 11 would make the hand value exceed 21.
-Running the Game
-You can run the game by executing the Python script in your terminal with the following command:
+When the game starts, the dealer and the bots are each dealt two cards. The bots then take turns deciding whether to "hit" (take another card) or "stand" (take no more cards). Bots may also "double" (double their initial bet and receive only one more card) or "split" (if they have two cards of the same rank, divide them into two hands and continue playing each hand separately).
 
-Copy code
+The goal for each bot is to have the sum of their cards be higher than the dealer's without exceeding 21. The dealer must hit until their cards total 17 or more, at which point they must stand.
+
+## How the Bots Make Decisions
+
+Bots make decisions based on simple logic:
+
+- If the total value of a bot's hand is less than 17, the bot will always hit.
+- If the total value of a bot's hand is 17 or higher, the bot will always stand.
+- If a bot has two cards of the same rank, it will always choose to split.
+- A bot will choose to double if its hand value is 11.
+
+## Running the Game
+
+To run the game, simply execute the Python script `blackjack.py`:
+
+```bash
 python blackjack.py
-Enjoy the game!
